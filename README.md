@@ -8,7 +8,7 @@ The first thing you want to do is run slackware-bootstrap-perl-and-python.pl, wh
 Please note that you'll have to download the sbopkg, sbotools (and optionally the slackpkg+) packages yourself from the appropriate places, as I am not uploading them here:
 
 https://sbopkg.org
-http://dawnrazor.net/sbotools/
+https://pink-mist.github.io/sbotools/
 http://slakfinder.org/slackpkg+.html
 
 Note: you might have to edit slackware-admin-setup.yaml if you download a newer version of the above packages.
