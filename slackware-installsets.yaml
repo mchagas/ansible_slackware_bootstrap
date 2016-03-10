@@ -1,0 +1,45 @@
+---
+
+# ansible_slackware_bootstrap
+#
+# File slackware-installsets.pl
+# Version 1.0
+# Copyright Joey Kelly (joeykelly.net)
+# March 9, 2016
+# License: GPL version 2
+#
+# https://github.com/mmlj4/ansible_slackware_bootstrap
+
+
+# we need to install software sets on a slackware box
+
+- hosts: '{{ hosts }}'
+  remote_user: root
+  tasks:
+
+    - file: path=/root/programs owner=root group=wheel mode=0775 state=directory
+    - copy: src=/root/ansible/slackware/slackware-installsets.pl dest=/root/programs/slackware-installsets.pl owner=root group=wheel mode=0744
+
+    # uncomment the following for each set you want to be installed on the target host
+    - raw: '/root/programs/slackware-installsets.pl a'
+    # to debug, uncomment these 2 lines, maintaining proper whitespace... lather, rinse and repeat for each set install you want to debug
+      #register: a
+    #- debug: var=a.stdout_lines
+    - raw: '/root/programs/slackware-installsets.pl ap'
+      register: ap
+    - debug: var=ap.stdout_lines
+    - raw: '/root/programs/slackware-installsets.pl d'
+    #- raw: '/root/programs/slackware-installsets.pl e'
+    - raw: '/root/programs/slackware-installsets.pl f'
+    - raw: '/root/programs/slackware-installsets.pl k'
+    #- raw: '/root/programs/slackware-installsets.pl kde'
+    #- raw: '/root/programs/slackware-installsets.pl kdei'
+    - raw: '/root/programs/slackware-installsets.pl l'
+    - raw: '/root/programs/slackware-installsets.pl n'
+    #- raw: '/root/programs/slackware-installsets.pl t'
+    #- raw: '/root/programs/slackware-installsets.pl tcl'
+    #- raw: '/root/programs/slackware-installsets.pl x'
+    #- raw: '/root/programs/slackware-installsets.pl xap'
+    #- raw: '/root/programs/slackware-installsets.pl xxfce'
+    - raw: '/root/programs/slackware-installsets.pl y'
+
