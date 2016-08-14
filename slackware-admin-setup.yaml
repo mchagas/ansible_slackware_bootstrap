@@ -3,7 +3,7 @@
 # ansible_slackware_bootstrap
 #
 # File: slackware-admin-setup.yaml
-# Version 1.0
+# Version 1.1
 # Copyright Joey Kelly (joeykelly.net)
 # March 9, 2016
 # License: GPL version 2
@@ -13,36 +13,47 @@
 
 # we need to set up basic admin stuff on a slackware box
 #
-# NOTE: I arbitrarily chose /root/ansible/slackware as my working directory. YMMV, so adjust accordingly.
-#
 # NOTE: I am not including sbopkg, sbotools nor slackpkg+ files, you'll need to get those on your own,
 # and update the version listed as needed.
+#
+# #NOTE: You probably want to copy your own dotfiles into the dotfiles directory, instead of using mine
 
 - hosts: '{{ hosts }}'
   remote_user: root
+  vars:
+    # NOTE: you need to edit these entries if you download newer versions of these tools
+    sbopkg:       sbopkg-0.38.0-noarch-1_wsr.tgz
+    sbotools:     sbotools-2.0-noarch-1_SBo.tgz
+    slackpkgplus: slackpkg+-1.7.0-noarch-4mt.txz
   tasks:
 
     # transfer account basics
     # you'll want to at least create these files (or comment out the plays), or copy your own in place
-    - copy: src=/root/ansible/slackware/.profile  dest=/root/.profile owner=root group=wheel mode=0744
-    - copy: src=/root/ansible/slackware/.bashrc   dest=/root/.bashrc  owner=root group=wheel mode=0744
-    - copy: src=/root/ansible/slackware/.vimrc    dest=/root/.vimrc   owner=root group=wheel mode=0744
+    - copy: src=dotfiles/.profile   dest=/root/.profile owner=root group=wheel mode=0744
+    - copy: src=dotfiles/.bashrc    dest=/root/.bashrc  owner=root group=wheel mode=0744
+    - copy: src=dotfiles/.vimrc     dest=/root/.vimrc   owner=root group=wheel mode=0744
 
+    # what directories do you want to create on the target machine? adjust for taste
     - file: path=/root/bin      owner=root group=wheel mode=0775 state=directory
     - file: path=/root/temp     owner=root group=wheel mode=0775 state=directory
     - file: path=/root/sbo      owner=root group=wheel mode=0775 state=directory
     - file: path=/root/ansible  owner=root group=wheel mode=0775 state=directory
+    - file: path=/root/packages owner=root group=wheel mode=0775 state=directory
     - file: path=/root/programs owner=root group=wheel mode=0775 state=directory
 
+    # a little utility I wrote that searches for installed Slackware packages...
+    - copy: src=bin/qpkglist.pl dest=/root/bin/qpkglist.pl owner=root group=wheel mode=0744
+
     # sbopkg, in case we need to install any one-offs
-    - copy: src=/root/ansible/slackware/sbopkg-0.37.1-noarch-1_wsr.tgz \
-            dest=/root/programs/sbopkg-0.37.1-noarch-1_wsr.tgz  owner=root group=wheel mode=0744
-    - raw: 'installpkg /root/programs/sbopkg-0.37.1-noarch-1_wsr.tgz'
+    - copy: src=packagetools/{{ sbopkg }} \
+            dest=/root/packages/sbopkg.tgz  owner=root group=wheel mode=0744
+    - raw: 'installpkg /root/packages/sbopkg.tgz'
 
     # sbotools, to make that job even easier :-)
-    - copy: src=/root/ansible/slackware/sbotools-1.9-noarch-1_SBo.tgz \
-            dest=/root/programs/sbotools-1.9-noarch-1_SBo.tgz  owner=root group=wheel mode=0744
-    - raw: 'installpkg /root/programs/sbotools-1.9-noarch-1_SBo.tgz'
+    # get yours at https://pink-mist.github.io/sbotools/
+    - copy: src=packagetools/{{ sbotools}} \
+            dest=/root/packages/sbotools.tgz  owner=root group=wheel mode=0744
+    - raw: 'installpkg /root/packages/sbotools.tgz'
     - raw: 'sbosnap fetch'
       register: sbosnap
       ignore_errors: True
@@ -50,12 +61,12 @@
       when: sbosnap|failed
 
     # ansible, so we can use that whenever possible from now on
-    - raw: 'sboinstall -r pycrypto ecdsa paramiko PyYAML pysetuptools MarkupSafe Jinja2 httplib2 ansible'
+    - raw: 'sboinstall -r pycrypto ecdsa paramiko PyYAML MarkupSafe Jinja2 httplib2 ansible'
 
-    # slackpkg+ will enable us to install precompiled sbo package :-)
+    # slackpkg+ will enable us to install precompiled packages from various third-party repos.
+    # Caveat emptor.
     # NOTE: uncomment this stanza if you want to install slackpkg+ on your system (some folks don't want this, so we leave it as an option).
-    #- copy: src=/root/ansible/slackware/slackpkg+-1.6.1p2-noarch-1mt.txz \
-    #  dest=/root/programs/slackpkg+-1.6.1p2-noarch-1mt.txz  owner=root group=wheel mode=0744
-    #- raw: 'installpkg /root/programs/slackpkg+-1.6.1p2-noarch-1mt.txz'
+    #- copy: src=packagetools/{{ slackpkgplus }} \
+    #  dest=/root/packages/slackpkgplus.txz  owner=root group=wheel mode=0744
+    #- raw: 'installpkg /root/packages/slackpkgplus.txz'
     #- raw: 'slackpkg update gpg'
-    

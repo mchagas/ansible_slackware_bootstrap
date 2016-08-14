@@ -3,7 +3,7 @@
 # ansible_slackware_bootstrap
 #
 # File slackware-installsets.pl
-# Version 1.0
+# Version 1.1
 # Copyright Joey Kelly (joeykelly.net)
 # March 9, 2016
 # License: GPL version 2
@@ -18,28 +18,69 @@
   tasks:
 
     - file: path=/root/programs owner=root group=wheel mode=0775 state=directory
-    - copy: src=/root/ansible/slackware/slackware-installsets.pl dest=/root/programs/slackware-installsets.pl owner=root group=wheel mode=0744
+    - copy: src=slackware-installsets.pl dest=/root/programs/slackware-installsets.pl owner=root group=wheel mode=0744
 
     # uncomment the following for each set you want to be installed on the target host
     - raw: '/root/programs/slackware-installsets.pl a'
-    # to debug, uncomment these 2 lines, maintaining proper whitespace... lather, rinse and repeat for each set install you want to debug
-      #register: a
-    #- debug: var=a.stdout_lines
+      register: a
+    - debug: var=a.stdout_lines
+
     - raw: '/root/programs/slackware-installsets.pl ap'
       register: ap
     - debug: var=ap.stdout_lines
-    - raw: '/root/programs/slackware-installsets.pl d'
-    #- raw: '/root/programs/slackware-installsets.pl e'
-    - raw: '/root/programs/slackware-installsets.pl f'
-    - raw: '/root/programs/slackware-installsets.pl k'
-    #- raw: '/root/programs/slackware-installsets.pl kde'
-    #- raw: '/root/programs/slackware-installsets.pl kdei'
-    - raw: '/root/programs/slackware-installsets.pl l'
-    - raw: '/root/programs/slackware-installsets.pl n'
-    #- raw: '/root/programs/slackware-installsets.pl t'
-    #- raw: '/root/programs/slackware-installsets.pl tcl'
-    #- raw: '/root/programs/slackware-installsets.pl x'
-    #- raw: '/root/programs/slackware-installsets.pl xap'
-    #- raw: '/root/programs/slackware-installsets.pl xxfce'
-    - raw: '/root/programs/slackware-installsets.pl y'
 
+    - raw: '/root/programs/slackware-installsets.pl d'
+      register: d
+    - debug: var=d.stdout_lines
+
+      #- raw: '/root/programs/slackware-installsets.pl e'
+      #register: e
+      #- debug: var=e.stdout_lines
+
+    - raw: '/root/programs/slackware-installsets.pl f'
+      register: f
+    - debug: var=f.stdout_lines
+
+    - raw: '/root/programs/slackware-installsets.pl k'
+      register: k
+    - debug: var=k.stdout_lines
+
+    #- raw: '/root/programs/slackware-installsets.pl kde'
+    #  register: kde
+    #- debug: var=kde.stdout_lines
+
+    #- raw: '/root/programs/slackware-installsets.pl kdei'
+    #  register: kdei
+    #- debug: var=kdei.stdout_lines
+
+    - raw: '/root/programs/slackware-installsets.pl l'
+      register: l
+    - debug: var=l.stdout_lines
+
+    - raw: '/root/programs/slackware-installsets.pl n'
+      register: n
+    - debug: var=n.stdout_lines
+
+    #- raw: '/root/programs/slackware-installsets.pl t'
+    #  register: t
+    #- debug: var=t.stdout_lines
+
+    #- raw: '/root/programs/slackware-installsets.pl tcl'
+    #  register: tcl
+    #- debug: var=tcp.stdout_lines
+
+    #- raw: '/root/programs/slackware-installsets.pl x'
+    #  register: x
+    #- debug: var=x.stdout_lines
+
+    #- raw: '/root/programs/slackware-installsets.pl xap'
+    #  register: xap
+    #- debug: var=xap.stdout_lines
+
+    #- raw: '/root/programs/slackware-installsets.pl xfce'
+    #  register: xfce
+    #- debug: var=xfce.stdout_lines
+
+    - raw: '/root/programs/slackware-installsets.pl y'
+      register: y
+    - debug: var=y.stdout_lines

@@ -25,8 +25,8 @@ die unless ($platformbits == 32 || $platformbits == 64);
 # # ___FIMXE___ use uname -m and determine this programmatically
 # choose your poison... but verify these links yourself
 my %mirror;
-$mirror{32} = 'http://slackware.cs.utah.edu/pub/slackware/slackware-14.1/';
-$mirror{64} = 'http://slackware.cs.utah.edu/pub/slackware/slackware64-14.1/';
+$mirror{32} = 'http://mirrors.slackware.com/slackware/slackware-14.2';
+$mirror{64} = 'http://mirrors.slackware.com/slackware/slackware64-14.2/';
 
 # # ___FIXME___ wrap these in IF clauses
 # let's ssh to the box, set up slackpkg, then get Perl and python installed.
