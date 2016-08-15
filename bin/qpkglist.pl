@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-$search = shift;
+my $search = shift;
 chomp $search;
 $search = safechars($search);
 
