@@ -9,10 +9,6 @@ Please note that while I have included the sbopkg, sbotools and slackpkg+ packag
 
 There are things that you should customize... for example, you will want to copy your own .profile, .bashrc and .vimrc dotfiles to the dotfiles directory... I've tried to document where such customizations could be made.
 
-https://sbopkg.org
-https://pink-mist.github.io/sbotools/
-http://slakfinder.org/slackpkg+.html
-
 Please, if you find errors or have suggestions, let me know. Thanks.
 
 --Joey Kelly
